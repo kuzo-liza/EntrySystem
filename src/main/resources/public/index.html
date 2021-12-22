@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Entry system</title>
+    <link href="./style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <div class="decor">
+        <div class="form-inner">
+            <h3>Система учета прохода в здание</h3>
+            <form id="bySurname" class="bySurname" name="bySurname" method="get">
+                <div class="inputDiv">
+                    <input id="inputSurName" type="text" placeholder="Фамилия">
+                    <input id="inputName" type="text" placeholder="Имя">
+                </div>
+                <div class="bySurnameDiv">
+                    <button id="accessBySurname" class="btn first" name="access">Узнать есть ли доступ в здание</button>
+                    <button id="insideBySurname" class="btn first" name="inside">Узнать находится ли внутри здания</button>
+                </div>
+            </form>
+            <form id="byNumber" class="byNumber" name="byNumber" method="get">
+                <input id="inputNumber" type="tel" placeholder="Номер телефона">
+                <div class="byNumberDiv">
+                    <button id="accessByNumber" class="btn first" name="access">Узнать есть ли доступ в здание</button>
+                    <button id="insideByNumber" class="btn first" name="inside">Узнать находится ли внутри здания</button>
+                </div>
+            </form>
+            <form class="people" name="peopleQuantity" method="get" action="/quantity">
+                <button class="btn first" name="quantity">Узнать сколько человек находятся внутри здания</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.querySelector('#bySurname')
+            const accessButton = document.querySelector('#accessBySurname')
+            const insideButton = document.querySelector('#insideBySurname')
+            const inputSurname = document.querySelector('#inputSurName')
+            const inputName = document.querySelector('#inputName')
+
+            accessButton && accessButton.addEventListener('click', (e) => {
+                e.preventDefault()
+
+                if (!form.checkValidity()) {
+                    return
+                }
+
+                var url = new URL('http://localhost:8080/accessBySurname')
+                var params = [['name', inputName.value], ['surname', inputSurname.value]]
+                url.search = new URLSearchParams(params).toString();
+                fetch(url, { method: 'GET' })
+                    .then((r => r.text()))
+                    .then((html) => {
+                        document.body.innerHTML = html
+                    });
+            })
+
+            insideButton && insideButton.addEventListener('click', (e) => {
+                e.preventDefault()
+
+                if (!form.checkValidity()) {
+                    return
+                }
+
+                var url = new URL('http://localhost:8080/insideBySurname')
+                var params = [['name', inputName.value], ['surname', inputSurname.value]]
+                url.search = new URLSearchParams(params).toString();
+                fetch(url, { method: 'GET' })
+                    .then((r => r.text()))
+                    .then((html) => {
+                        document.body.innerHTML = html
+                    });
+            })
+        })
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.querySelector('#byNumber')
+            const accessButton = document.querySelector('#accessByNumber')
+            const insideButton = document.querySelector('#insideByNumber')
+            const inputNumber = document.querySelector('#inputNumber')
+
+            accessButton && accessButton.addEventListener('click', (e) => {
+                e.preventDefault()
+
+                if (!form.checkValidity()) {
+                    return
+                }
+
+                var url = new URL('http://localhost:8080/accessByNumber')
+                var params = [['number', inputNumber.value]]
+                url.search = new URLSearchParams(params).toString();
+                fetch(url, { method: 'GET' })
+                    .then((r => r.text()))
+                    .then((html) => {
+                        document.body.innerHTML = html
+                    });
+            })
+
+            insideButton && insideButton.addEventListener('click', (e) => {
+                e.preventDefault()
+
+                if (!form.checkValidity()) {
+                    return
+                }
+
+                var url = new URL('http://localhost:8080/insideByNumber')
+                var params = [['number', inputNumber.value]]
+                url.search = new URLSearchParams(params).toString();
+                fetch(url, { method: 'GET' })
+                    .then((r => r.text()))
+                    .then((html) => {
+                        document.body.innerHTML = html
+                    });
+            })
+        })
+    </script>
+</body>
+</html>

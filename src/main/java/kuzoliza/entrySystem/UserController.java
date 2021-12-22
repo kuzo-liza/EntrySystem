@@ -3,6 +3,7 @@ package kuzoliza.entrySystem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,8 +31,9 @@ public class UserController {
     }
 
     @GetMapping("/quantity")
-    public int peopleQuantity() {
-        return userRepository.findAllByInsideTrue().size();
+    public String peopleQuantity(Model model) {
+        model.addAttribute("quantity", userRepository.findAllByInsideTrue().size());
+        return "quantity";
     }
 
     @GetMapping("/insideByNumber")
@@ -51,7 +53,7 @@ public class UserController {
 
     private List<User> getUsers(@Nullable String name, String surname) {
         List<User> users;
-        if (name == null) {
+        if (name == null || name.isEmpty()) {
             users = userRepository.findAllBySurname(surname);
         } else {
             users = userRepository.findAllByNameAndSurname(name, surname);
@@ -63,4 +65,5 @@ public class UserController {
     public String status() {
         return "Server is working";
     }
+
 }
