@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Inside building</title>
-    <link rel="stylesheet" type="text/css" th:href="@{/inside.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/styleTemplate.css}"/>
 </head>
 <body>
 <h3>Сейчас в здании: </h3>
@@ -23,8 +23,18 @@
             <td th:utext="${user.surname}">...</td>
             <td th:utext="${user.name}">...</td>
             <td th:utext="${user.telephoneNumber}">...</td>
-            <td th:utext="${user.access}">...</td>
-            <td th:utext="${user.inside}">...</td>
+            <div th:if="${user.access}">
+                <div> <td th:utext="Есть">...</td></div>
+            </div>
+            <div th:unless="${user.access}">
+                <div><td th:utext="Нет">...</td></div>
+            </div>
+            <div th:if="${user.inside}">
+                <div> <td th:utext="Да">...</td></div>
+            </div>
+            <div th:unless="${user.inside}">
+                <div><td th:utext="Нет">...</td></div>
+            </div>
         </tr>
     </table>
 </div>
