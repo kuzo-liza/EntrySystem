@@ -25,7 +25,7 @@ public class UserController {
             model.addAttribute("accessNum", hasNoAccess);
             return "accessByNumber";
         } else {
-            if (user.isAccess() == false) {
+            if (!user.isAccess()) {
                 model.addAttribute("accessNum", hasNoAccess);
             } else {
                 model.addAttribute("accessNum", hasAccess);
@@ -57,7 +57,7 @@ public class UserController {
             model.addAttribute("insideNum", outside);
             return "insideByNumber";
         } else {
-            if (user.isInside() == false) {
+            if (!user.isInside()) {
                 model.addAttribute("insideNum", outside);
             } else {
                 model.addAttribute("insideNum", inside);
