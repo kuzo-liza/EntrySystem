@@ -10,24 +10,35 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@RestController
+@Controller
 public class UserController {
     @Autowired
     private UserRepository userRepository;
 
     @GetMapping("/accessByNumber")
-    public boolean hasAccess(@RequestParam String number) {
+    public String hasAccess(@RequestParam String number, Model model) {
         User user = userRepository.findByTelephoneNumber(number);
-        if (user == null) {
-            return false;
+        String hasAccess = "Есть";
+        String hasNoAccess = "Нет";
+
+        if (user == null ) {
+            model.addAttribute("accessNum", hasNoAccess);
+            return "accessByNumber";
         } else {
-            return user.isAccess();
+            if (user.isAccess() == false) {
+                model.addAttribute("accessNum", hasNoAccess);
+            } else {
+                model.addAttribute("accessNum", hasAccess);
+            }
+            return "accessByNumber";
         }
     }
 
     @GetMapping("/accessBySurname")
-    public List<User> hasAccess(@RequestParam(required = false) String name, @RequestParam String surname) {
-        return getUsers(name, surname);
+    public String hasAccess(@RequestParam(required = false) String name, @RequestParam String surname, Model model) {
+        List<User> users = getUsers(name, surname);
+        model.addAttribute("users", users);
+        return "access";
     }
 
     @GetMapping("/quantity")
@@ -37,18 +48,29 @@ public class UserController {
     }
 
     @GetMapping("/insideByNumber")
-    public boolean isInside(@RequestParam String number) {
+    public String isInside(@RequestParam String number, Model model) {
         User user = userRepository.findByTelephoneNumber(number);
+        String inside = "Да";
+        String outside = "Нет";
+
         if (user == null) {
-            return false;
+            model.addAttribute("insideNum", outside);
+            return "insideByNumber";
         } else {
-            return user.isInside();
+            if (user.isInside() == false) {
+                model.addAttribute("insideNum", outside);
+            } else {
+                model.addAttribute("insideNum", inside);
+            }
+            return "insideByNumber";
         }
     }
 
     @GetMapping("/insideBySurname")
-    public List<User> isInside(@RequestParam(required = false) String name, @RequestParam String surname) {
-        return getUsers(name, surname);
+    public String isInside(@RequestParam(required = false) String name, @RequestParam String surname, Model model) {
+        List<User> users = getUsers(name, surname);
+        model.addAttribute("users", users);
+        return "inside";
     }
 
     private List<User> getUsers(@Nullable String name, String surname) {
